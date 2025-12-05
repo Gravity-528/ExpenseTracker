@@ -3,6 +3,7 @@ package com.Project.ExpenseTracker.service;
 import com.Project.ExpenseTracker.entities.UserInfo;
 import com.Project.ExpenseTracker.models.UserInfoDto;
 import com.Project.ExpenseTracker.repository.UserRepository;
+import com.Project.ExpenseTracker.util.VailidationUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
     }
 
     public Boolean signupUser(UserInfoDto userInfoDto){
+        Boolean check=VailidationUser.checkPassword(userInfoDto.getPassword());
+        if(!check){
+//            throw new Exception("password is not valid give a suitable password of atleast 8 numbers");
+            return false;
+        }
         userInfoDto.setPassword(passwordEncoder.encode(userInfoDto.getPassword()));
         if(Objects.nonNull(checkIfUserAlreadyExist(userInfoDto))){
             return false;
